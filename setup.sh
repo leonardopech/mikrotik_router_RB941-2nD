@@ -1,9 +1,18 @@
+
+/system reset-configuration no-defaults=yes skip-backup=no
+
+================================
+
 /interface bridge
 add name=WAN
 add name=LAN_CLIENTES
 
 /interface bridge port
 add bridge=WAN interface=ether1
+
+================================
+
+/interface bridge port
 add bridge=LAN_CLIENTES interface=ether2
 add bridge=LAN_CLIENTES interface=ether3
 add bridge=LAN_CLIENTES interface=ether4
@@ -20,3 +29,7 @@ set servers=1.1.1.1,8.8.8.8
 
 /ip firewall nat
 add chain=srcnat action=masquerade out-interface=WAN
+
+/
+ping google.com count=4
+
