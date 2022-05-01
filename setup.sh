@@ -1,35 +1,58 @@
+================================
 
 /system reset-configuration no-defaults=yes skip-backup=no
 
 ================================
 
-/interface bridge
-add name=WAN
-add name=LAN_CLIENTES
-
-/interface bridge port
-add bridge=WAN interface=ether1
+/system identity
+set name=router-name-here
 
 ================================
 
+/user
+add name=your-user-here group=full password=your-pwd-here
+
+================================
+
+/interface bridge
+add name=INTERNET
+
 /interface bridge port
-add bridge=LAN_CLIENTES interface=ether2
-add bridge=LAN_CLIENTES interface=ether3
-add bridge=LAN_CLIENTES interface=ether4
+add bridge=INTERNET interface=ether1
 
-/ip address
-add address=192.168.39.254/24 interface=WAN
-add address=192.168.50.1/24 interface=LAN_CLIENTES
-
-/ip route
-add gateway=192.168.39.1
+/ip dhcp-client
+add interface=INTERNET
 
 /ip dns
 set servers=1.1.1.1,8.8.8.8
 
 /ip firewall nat
-add chain=srcnat action=masquerade out-interface=WAN
+add chain=srcnat action=masquerade out-interface=INTERNET
 
-/
-ping google.com count=4
+/ping google.com count=4
 
+================================
+
+/interface bridge
+add name=HOTSPOT
+
+/interface bridge port
+add bridge=HOTSPOT interface=ether2
+
+================================
+
+/interface bridge
+add name=CLIENTES_FIJOS
+
+/interface bridge port
+add bridge=CLIENTES_FIJOS interface=ether3
+
+================================
+
+/interface bridge
+add name=MGMT
+
+/interface bridge port
+add bridge=MGMT interface=ether4
+
+================================
